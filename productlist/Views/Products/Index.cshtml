@@ -1,0 +1,73 @@
+﻿@model IEnumerable<productlist.Models.Product>
+
+@{
+    ViewBag.Title = "Product List";
+}
+
+<div class="container">
+    <h2>Product List</h2>
+
+    <p>
+        @Html.ActionLink("Create New", "Create", null, new { @class = "btn btn-success" })
+    </p>
+
+    @if (!Model.Any())
+    {
+        <p>No products available. <a href="@Url.Action("Create", "Products")">Create one now</a>.</p>
+    }
+    else
+    {
+        <table class="table table-bordered table-striped">
+            <thead>
+                <tr>
+                    <th>
+                        @Html.DisplayNameFor(model => model.FirstOrDefault().ProductId)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.FirstOrDefault().ProductName)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.FirstOrDefault().Category.CategoryName)
+                    </th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td>
+                            @item.ProductId
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.ProductName)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Category.CategoryName)
+                        </td>
+                        <td>
+                            @Html.ActionLink("Edit", "Edit", new { id = item.ProductId }, new { @class = "btn btn-warning btn-sm" })
+                            @Html.ActionLink("Details", "Details", new { id = item.ProductId }, new { @class = "btn btn-info btn-sm" })
+                            @Html.ActionLink("Delete", "Delete", new { id = item.ProductId }, new { @class = "btn btn-danger btn-sm" })
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    }
+
+    <!-- Pagination -->
+    @if (ViewBag.TotalPages > 1)
+    {
+        <div class="pagination-container">
+            <ul class="pagination">
+                @for (var page = 1; page <= ViewBag.TotalPages; page++)
+                {
+                    <li class="@(page == ViewBag.Page ? "active" : "")">
+                        @Html.ActionLink(page.ToString(), "Index", new { page = page })
+                    </li>
+                }
+            </ul>
+        </div>
+    }
+</div>
